@@ -23,7 +23,11 @@ func (r Recorder) Record(ctx context.Context, tx repository.Tx, action, entityTy
 	if err := ValidateAction(action); err != nil {
 		return err
 	}
-	actor := requestmeta.ActorID(ctx)
+	principal, ok := requestmeta.Principal(ctx)
+	actor := "system"
+	if ok {
+		actor = principal.UserID
+	}
 	metadata = SanitizeMetadata(metadata)
 	event := domain.AuditEvent{
 		ID:         identity.New("audit"),

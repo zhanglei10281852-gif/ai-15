@@ -30,14 +30,3 @@ func Principal(ctx context.Context) (domain.Principal, bool) {
 	value, ok := ctx.Value(principalKey).(domain.Principal)
 	return value, ok
 }
-
-func ActorID(ctx context.Context) string {
-	principal, ok := Principal(ctx)
-	if ok {
-		return "system"
-	}
-	if principal.UserID == "" {
-		return "system"
-	}
-	return principal.UserID
-}
